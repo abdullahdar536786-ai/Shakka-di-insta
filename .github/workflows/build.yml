@@ -1,20 +1,16 @@
-name: Build Shakka APK
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
+name: APK
+on: workflow_dispatch
 jobs:
-  build:
+  b:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.22.0'
-      - run: flutter pub get
-      - run: flutter build apk --release
-      - uses: actions/upload-artifact@v4
-        with:
-          name: shakka-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with: {distribution: zulu, java-version: '17'}
+    - uses: subosito/flutter-action@v2
+      with: {flutter-version: '3.22.0'}
+    - run: flutter create . --project-name shakka --platforms=android
+    - run: flutter pub get
+    - run: flutter build apk --release
+    - uses: actions/upload-artifact@v4
+      with: {name: Shakka, path: build/app/outputs/flutter-apk/app-release.apk}
